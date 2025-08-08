@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Cake</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom right, #ffe6f0, #fce3ff, #fffbf0);
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Decorative sparkles */
+    body::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(#ffffff55 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+    }
+
+    .cake {
+      position: relative;
+      width: 200px;
+      z-index: 2;
+    }
+
+    .plate {
+      width: 220px;
+      height: 20px;
+      background: #ccc;
+      border-radius: 50%;
+      margin-top: 10px;
+    }
+
+    .layer {
+      width: 200px;
+      height: 60px;
+      margin: 0 auto;
+      border-radius: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      animation: rise 0.6s ease-out forwards;
+    }
+
+    .layer:nth-child(1) {
+      background: #d2691e;
+      animation-delay: 0.5s;
+    }
+
+    .layer:nth-child(2) {
+      background: #ffddcc;
+      animation-delay: 1s;
+    }
+
+    .layer:nth-child(3) {
+      background: #8b4513;
+      animation-delay: 1.5s;
+      position: relative;
+    }
+
+    .layer:nth-child(3)::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 20px;
+      background: #8b4513;
+      border-radius: 0 0 20px 20px;
+      top: 100%;
+    }
+
+    @keyframes rise {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .candle {
+      width: 10px;
+      height: 50px;
+      background: #fff;
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%) scaleY(0);
+      border-radius: 2px;
+      animation: pop 0.5s ease-out forwards;
+      animation-delay: 2s;
+      cursor: pointer;
+    }
+
+    .flame {
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle, orange 60%, red 80%);
+      border-radius: 50%;
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: flicker 5s infinite alternate;
+    }
+
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); opacity: 1; }
+      to { transform: translateX(-50%) scale(1.2); opacity: 0.6; }
+    }
+
+    @keyframes pop {
+      to {
+        transform: translateX(-50%) scaleY(1);
+      }
+    }
+
+    #message {
+      margin-top: 30px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #e91e63;
+      display: none;
+      animation: fadeIn 1s forwards;
+      z-index: 2;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: red;
+      top: 0;
+      animation: fall 4s linear infinite;
+      opacity: 0.7;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10px) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    /* Balloons */
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 30px;
+      height: 40px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: floatUp 10s infinite ease-in;
+      z-index: 0;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- Audio -->
+<audio id="music" src="https://free.birthday.download/wp-content/Happy-Birthday-Song-mp3.mp3"></audio>
+
+<!-- Cake -->
+<div class="cake">
+  <div class="layer"></div>
+  <div class="layer"></div>
+  <div class="layer"></div>
+  <div class="plate"></div>
+  <div class="candle" onclick="blowCandle()">
+    <div class="flame" id="flame"></div>
+  </div>
+</div>
+
+<div id="message">🎉 Happy Birthday Ansh! 🎉</div>
+
+<!-- Balloons (Added via JS for variety) -->
+<script>
+  function blowCandle() {
+    const flame = document.getElementById("flame");
+    const message = document.getElementById("message");
+    const music = document.getElementById("music");
+
+    if (flame) flame.style.display = "none";
+    message.style.display = "block";
+    music.play();
+
+    // Confetti
+    for (let i = 0; i < 100; i++) {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+      confetti.style.left = Math.random() * 100 + "vw";
+      confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      confetti.style.animationDuration = 2 + Math.random() * 3 + "s";
+      confetti.style.width = confetti.style.height = Math.random() * 10 + 5 + "px";
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 5000);
+    }
+
+    // Balloons
+    for (let i = 0; i < 20; i++) {
+      const balloon = document.createElement("div");
+      balloon.classList.add("balloon");
+      balloon.style.left = Math.random() * 100 + "vw";
+      balloon.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+      balloon.style.animationDuration = 8 + Math.random() * 4 + "s";
+      balloon.style.width = balloon.style.height = 30 + Math.random() * 20 + "px";
+      document.body.appendChild(balloon);
+      setTimeout(() => balloon.remove(), 10000);
+    }
+  }
+</script>
+
+</body>
+</html>
